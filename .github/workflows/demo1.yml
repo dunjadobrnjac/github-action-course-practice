@@ -3,7 +3,16 @@ on:
     pull_request: 
         types:
             - opened
-    workflow_dispatch: 
+        branches: 
+            - main
+    workflow_dispatch:
+    push: 
+        branches: 
+            - main 
+            - 'dev-*'
+            - 'feat/**'
+        paths-ignore: 
+            - '.github/workflow/*' # za sve izmjene fajlova sem u ovom folderu
 
 jobs:
     deploy:
