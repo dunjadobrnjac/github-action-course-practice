@@ -1,0 +1,48 @@
+name: Lint, Test & Deploy on "push"
+on: [push, workflow_dispatch]
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get code
+              uses: actions/checkout@v4
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Lint
+              run:
+                echo "Lint"
+                npm run lint # poziva se iz package.json fajla, sekcija scripts (lint, build, test)
+
+
+    test:
+        needs: lint
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get code
+              uses: actions/checkout@v4
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run test
+              run: 
+                echo "Running tests..."
+                npm run test # moze i samo npm test
+
+    deploy:
+        needs:  test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get code
+              uses: actions/checkout@v4
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build & Deploy project
+              run: 
+                echo "Deploying project..."
+                npm run build
