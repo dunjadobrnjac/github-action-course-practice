@@ -12,7 +12,7 @@ on:
             - 'dev-*'
             - 'feat/**'
         paths-ignore: 
-            - '.github/workflow/*' # za sve izmjene fajlova sem u ovom folderu
+            - '.github/workflows/*' # za sve izmjene fajlova sem u ovom folderu
 
 jobs:
     deploy:
