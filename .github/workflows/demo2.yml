@@ -23,6 +23,12 @@ jobs:
     build:
         needs:  test
         runs-on: ubuntu-latest
+        outputs:
+            script-file: 
+                ${{ steps.publish.outputs.script-name }} # access the steps contex value
+            #identifier by which we will be able to access the output value (any name)
+            # script-file - output for the job
+          
         steps:
             - name: Get code
               uses: actions/checkout@v4
@@ -33,6 +39,16 @@ jobs:
             - name: Build website
               run: npm run build # proizvodi output fajlove (dist folder sa assets folderom, a u njemu index.html i vite.svg)
 
+            - name: Publish JS filename
+              id: publish
+              run: find dist/assets/*.js -type f -execdir echo 'script-name={}' >> $GITHUB_OUTPUT ';' 
+              # writes the output to a file which path is stored in GITHUB_OUTPUT variable 
+              # script-name - output for the step
+
+              # run: find dist/assets/*.js -type f -execdir echo '{}' ';'
+              # Linux command that finds the JS file in the dist/assets folder
+              # And executes the echo command to output that file name
+
               # saving artifacts after runing npm run build
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
@@ -40,7 +56,7 @@ jobs:
                 name: dist-files # name of the artifact to upload
                 path: # |  # where to find the files that should be stored
                     dist
-                    # package.json
+                    # package.json 
     
     deploy:
         needs: build
@@ -53,6 +69,9 @@ jobs:
 
             - name: Output contents
               run: ls # lists all the contents of the foler in which we currently are
+
+            - name: Output filename
+              run: echo "${{ needs.build.outputs.script-file }}"
 
             - name: Deploy
               run : echo "Deploying..."
