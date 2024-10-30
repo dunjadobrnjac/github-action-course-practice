@@ -11,6 +11,14 @@ jobs:
             - name: Get code
               uses: actions/checkout@v4
 
+            - name: Cache dependencies
+              uses: actions/cache@v4
+              with:
+                path: ~/.npm 
+                # path or paths that point at the files and folders that should be cached
+                # for node dependencies : ~/.npm (npm tool internal dep. cache)
+                key: deps-node-modules-${{ hashFiles('**/package-lock.json')}}
+
             - name: Install dependencies
               run: npm ci
 
@@ -32,6 +40,14 @@ jobs:
         steps:
             - name: Get code
               uses: actions/checkout@v4
+
+            - name: Cache dependencies
+              uses: actions/cache@v4
+              with:
+                path: ~/.npm 
+                # path or paths that point at the files and folders that should be cached
+                # for node dependencies : ~/.npm (npm tool internal dep. cache)
+                key: deps-node-modules-${{ hashFiles('**/package-lock.json')}}
 
             - name: Install dependencies
               run: npm ci
